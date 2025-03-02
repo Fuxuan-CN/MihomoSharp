@@ -11,7 +11,7 @@ using MihomoSharp.Exceptions.UserNotFound;
 
 namespace MihomoSharp.Core.Client;
 
-public class MihomoClient
+public sealed class MihomoClient
 {
     private readonly HttpClient _httpClient;
     private readonly string _baseUrl = "https://api.mihomo.me/sr_info_parsed";

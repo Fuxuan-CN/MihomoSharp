@@ -5,7 +5,7 @@ using MihomoSharp.Models.Character;
 
 namespace MihomoSharp.Models.StarRailInfo;
 
-public class StarrailInfoParsed
+public sealed class StarrailInfoParsed
 {
     [JsonPropertyName("player")]
     public PlayerModel Player { get; set; }

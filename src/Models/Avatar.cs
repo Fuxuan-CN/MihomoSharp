@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace MihomoSharp.Models.Avatar;
 
-public class AvatarModel
+public sealed class AvatarModel
 {
     [JsonPropertyName("id")]
     public string Id { get; set; }

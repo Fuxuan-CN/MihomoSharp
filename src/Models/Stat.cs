@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace MihomoSharp.Models.Stat;
 
-public class Attribute
+public sealed class Attribute
 {
     [JsonPropertyName("field")]
     public string Field { get; set; }
@@ -51,7 +51,7 @@ public class MainAffix : Property
 {
 }
 
-public class SubAffix : MainAffix
+public sealed class SubAffix : MainAffix
 {
     [JsonPropertyName("count")]
     public int Count { get; set; }

@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace MihomoSharp.Models.Combat;
 
-public class Element
+public sealed class Element
 {
     [JsonPropertyName("id")]
     public string Id { get; set; }
@@ -18,7 +18,7 @@ public class Element
     public string Icon { get; set; }
 }
 
-public class Path
+public sealed class Path
 {
     [JsonPropertyName("id")]
     public string Id { get; set; }
@@ -30,7 +30,7 @@ public class Path
     public string Icon { get; set; }
 }
 
-public class Trace
+public sealed class Trace
 {
     [JsonPropertyName("id")]
     public string Id { get; set; }
@@ -69,7 +69,7 @@ public class Trace
     public string Icon { get; set; }
 }
 
-public class TraceTreeNode
+public sealed class TraceTreeNode
 {
     [JsonPropertyName("id")]
     public string Id { get; set; }

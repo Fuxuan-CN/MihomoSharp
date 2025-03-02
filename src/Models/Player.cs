@@ -1,18 +1,7 @@
 using System.Text.Json.Serialization;
+using MihomoSharp.Models.Avatar;
 
 namespace MihomoSharp.Models.Player;
-
-public class Avatar
-{
-    [JsonPropertyName("id")]
-    public string Id { get; set; }
-
-    [JsonPropertyName("name")]
-    public string Name { get; set; }
-
-    [JsonPropertyName("icon")]
-    public string Icon { get; set; }
-}
 
 public class ForgottenHall
 {
@@ -44,7 +33,7 @@ public class PlayerModel
     public int FriendCount { get; set; }
 
     [JsonPropertyName("avatar")]
-    public Avatar Avatar { get; set; }
+    public AvatarModel Avatar { get; set; }
 
     [JsonPropertyName("signature")]
     public string Signature { get; set; }

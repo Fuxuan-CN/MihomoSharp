@@ -6,7 +6,7 @@ using MihomoSharp.Models.Stat;
 
 namespace MihomoSharp.Models.Character;
 
-public class CharacterModel
+public sealed class CharacterModel
 {
     [JsonPropertyName("id")]
     public string Id { get; set; }

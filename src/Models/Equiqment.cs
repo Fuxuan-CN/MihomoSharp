@@ -6,7 +6,7 @@ using MihomoSharp.Models.Stat;
 
 namespace MihomoSharp.Models.Equipment;
 
-public class LightCone
+public sealed class LightCone
 {
     [JsonPropertyName("id")]
     public string Id { get; set; }
@@ -47,7 +47,7 @@ public class LightCone
     public int MaxLevel => 20 + 10 * Promotion;
 }
 
-public class Relic
+public sealed class Relic
 {
     [JsonPropertyName("id")]
     public string Id { get; set; }
@@ -77,7 +77,7 @@ public class Relic
     public string Icon { get; set; }
 }
 
-public class RelicSet
+public sealed class RelicSet
 {
     [JsonPropertyName("id")]
     public string Id { get; set; }

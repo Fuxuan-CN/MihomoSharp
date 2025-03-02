@@ -110,7 +110,7 @@ await client.FetchCharacterIconAsync(character);
 await client.FetchIconCommitAsync();
 ```
 
-### dont want to invoke commit fetch player method?
+### dont want to invoke commit fetch icon method?
 
 - dont worry, here is the code to fetch player avatar without invoking commit fetch player method.
 

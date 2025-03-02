@@ -23,7 +23,7 @@ jobs:
     - name: Extract version from csproj
       id: extract-version
       run: |
-        version=$(grep "<Version>" MihomoSharp.csproj | sed -e 's/<Version>//g' -e 's/<\/Version>//g')
+        version=$(grep "<Version>" MihomoSharp.csproj | sed -e 's/<Version>//g' -e 's/<\/Version>//g' | sed 's/^[ \t]*//' -e 's/[ \t]*$//')
         echo "VERSION=$version" >> $GITHUB_ENV
 
     - name: Restore dependencies
@@ -34,10 +34,6 @@ jobs:
 
     - name: Pack
       run: dotnet pack --no-build --configuration Release
-
-    - name: Debug output
-      run: |
-        echo "Pushing package: bin/Release/MihomoSharp.${{ env.VERSION }}.nupkg"
 
     - name: Publish
       run: |

@@ -1,5 +1,10 @@
 # MihomoSharp
 
+## 语言 / Language
+
+- [中文文档](README.md)
+- [English Documentation](README_EN.md)
+
 ## 描述
 
 MihomoSharp 是一个基于 C# 的库，用于从 [Mihomo API](https://api.mihomo.me) 获取和解析《崩坏：星穹铁道》（Honkai: Star Rail）的玩家数据。它是基于 Python 版本的 `mihomo` 重构而来，源地址为：[Mihomo](https://github.com/KT-Yeh/mihomo)。

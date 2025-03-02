@@ -11,7 +11,7 @@ using MihomoSharp.Exceptions.UserNotFound;
 
 namespace MihomoSharp.Core.Client;
 
-public sealed class MihomoClient
+public sealed class MihomoClient : IDisposable
 {
     private readonly HttpClient _httpClient;
     private readonly string _baseUrl = "https://api.mihomo.me/sr_info_parsed";
@@ -75,6 +75,7 @@ public sealed class MihomoClient
     public async Task FetchIconCommitAsync()
     {
         await Task.WhenAll(_tasks);
+        _tasks.Clear(); // 清空任务列表
     }
 
     public async Task WriteIconBytesToFileAsync(byte[] data, string name, string basePath = "icons")
@@ -112,5 +113,11 @@ public sealed class MihomoClient
             default:
                 throw new HttpRequestException("Failed to fetch user data.");
         }
+    }
+
+    public void Dispose()
+    {
+        _httpClient.Dispose();
+        _tasks.Clear();
     }
 }

@@ -35,7 +35,7 @@ using System;
 using System.Threading.Tasks;
 using MihomoSharp.Core.Client;
 using MihomoSharp.Models.StarRailInfo;
-using MihomoSharp.Models.LanguageSwich;
+using MihomoSharp.Models.LanguageSwitch;
 using MihomoSharp.Exceptions.UserNotFound;
 
 namespace YourNamespace;

@@ -23,7 +23,7 @@ jobs:
     - name: Extract version from csproj
       id: extract-version
       run: |
-        version=$(grep "<Version>" MihomoSharp.csproj | sed -e 's/<Version>//g' -e 's/<\/Version>//g' | sed 's/^[ \t]*//' -e 's/[ \t]*$//')
+        version=$(grep "<Version>" MihomoSharp.csproj | sed -e 's/<Version>//g' -e 's/<\/Version>//g' | tr -d ' ')
         echo "VERSION=$version" >> $GITHUB_ENV
 
     - name: Restore dependencies

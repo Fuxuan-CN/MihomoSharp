@@ -108,7 +108,8 @@ await client.FetchIconCommitAsync(); // 提交所有头像下载任务
 - 没事，我提供了一个选项，可以不显示提交，立即执行头像下载任务。
 
 ```csharp
-await client.FetchIconAsync(executeImmediately: true); // 不显示提交，立即执行
+// 确保 obj 是 PlayerData 或 CharacterModel 类型，不然会抛出 ArgumentException
+await client.FetchIconAsync(obj, executeImmediately: true); // 不显示提交，立即执行
 ```
 
 ### 项目进度

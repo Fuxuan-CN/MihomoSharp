@@ -3,7 +3,7 @@
 ## 语言 / Language
 
 - [中文文档](README.md)
-- [English Documentation](README_EN.md)
+- [English Documentation](README.EN.md)
 
 ## 描述
 

@@ -9,12 +9,15 @@
     <Description>A C# library for Honkai StarRail Data API.</Description>
     <Authors>Fuxuan-CN</Authors>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReadmeFile>README.EN.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/Fuxuan-CN/MihomoSharp</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\"/>
     <None Include="LICENSE.md" Pack="true" PackagePath="\"/>
+    <None Include="README.EN.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
 </Project>

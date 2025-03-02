@@ -16,6 +16,7 @@ public class MihomoClient
     private readonly HttpClient _httpClient;
     private readonly string _baseUrl = "https://api.mihomo.me/sr_info_parsed";
     private readonly string _assertUrl = "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master";
+    private List<Task> _tasks = new List<Task>();
 
     public MihomoClient()
     {
@@ -37,30 +38,30 @@ public class MihomoClient
         }
     }
 
-    public async Task FetchIconAsync(object Model)
+    public void FetchIcon(object Model)
     {
-        List<Task> tasks = new List<Task>();
-
         switch (Model)
         {
             case CharacterModel character:
                 var icon = GetIconUrl(character.Icon);
                 string Name = character.Name;
                 string AllName = $"{Name}.{icon.FileType}";
-                tasks.Add(FetchAsync(AllName, icon.iconUrl, "icons/characters"));
+                _tasks.Add(FetchAsync(AllName, icon.iconUrl, "icons/characters"));
                 break;
             case PlayerModel player:
                 var avatar = GetIconUrl(player.Avatar.Icon);
                 string uid = player.Uid;
                 string name = $"{uid}_avatar.{avatar.FileType}";
-                tasks.Add(FetchAsync(name, avatar.iconUrl, "icons/player"));
+                _tasks.Add(FetchAsync(name, avatar.iconUrl, "icons/player"));
                 break;
             default:
                 throw new ArgumentException($"Invalid model type. {nameof(Model)}");
         }
+    }
 
-        // 等待所有任务完成
-        await Task.WhenAll(tasks);
+    public async Task FetchIconCommitAsync()
+    {
+        await Task.WhenAll(_tasks);
     }
 
     public async Task WriteIconBytesToFileAsync(byte[] data, string name, string basePath = "icons")

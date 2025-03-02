@@ -97,6 +97,14 @@ await client.FetchPlayerIconAsync(playerData.Player);
 await client.FetchCharacterIconAsync(character);
 ```
 
+### commit fetch player avatar task
+
+```csharp
+// please make sure to invoke this method to execute your fetch tasks
+// or you will get notting.
+await client.FetchIconCommitAsync();
+```
+
 ### Project Progress
 
 - [x] Reimplementation of the original mihomo V2 version.

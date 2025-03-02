@@ -86,14 +86,21 @@ namespace MihomoSharp
 
 ```csharp
 // 确保playerData是PlayerData类型，不然会抛出ArgumentException
-await client.FetchIconAsync(playerData.Player);
+client.FetchIcon(playerData.Player);
 ```
 
 ### 获取角色头像
 
 ```csharp
 // 确保character是CharacterModel类型，不然会抛出ArgumentException
-await client.FetchIconAsync(character);
+client.FetchIcon(character);
+```
+
+### 下载头像任务提交
+
+```csharp
+// 最后，不要忘了提交头像下载任务噢!
+await client.FetchIconCommitAsync(); // 提交所有头像下载任务
 ```
 
 ### 项目进度

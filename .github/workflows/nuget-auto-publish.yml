@@ -37,6 +37,6 @@ jobs:
 
     - name: Publish
       run: |
-        dotnet nuget push bin/Release/MihomoSharp.${{ env.VERSION }}.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
+        dotnet nuget push "/home/runner/work/MihomoSharp/MihomoSharp/bin/Release/MihomoSharp.${{ env.VERSION }}.nupkg" -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
       env:
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}

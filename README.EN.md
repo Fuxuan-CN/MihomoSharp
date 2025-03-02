@@ -115,7 +115,8 @@ await client.FetchIconCommitAsync();
 - dont worry, here is the code to fetch player avatar without invoking commit fetch player method.
 
 ```csharp
-await client.FetchIconAsync(executeImmediately: true);
+// ensure the obj is a PlayerModel or CharacterModel.
+await client.FetchIconAsync(obj, executeImmediately: true);
 ```
 
 ### Project Progress

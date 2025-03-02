@@ -20,11 +20,6 @@ jobs:
       with:
         dotnet-version: '9.0.x'
 
-    - name: Extract version from csproj
-      id: extract-version
-      run: |
-        version=$(grep "<Version>" MihomoSharp.csproj | sed -e 's/<Version>//g' -e 's/<\/Version>//g' | tr -d ' ')
-        echo "VERSION=$version" >> $GITHUB_ENV
 
     - name: Restore dependencies
       run: dotnet restore
@@ -33,10 +28,13 @@ jobs:
       run: dotnet build --no-restore --configuration Release
 
     - name: Pack
-      run: dotnet pack --no-build --configuration Release
+      id: pack
+      run: |
+        dotnet pack --no-build --configuration Release
+        echo "PACKAGE_PATH=$(ls bin/Release/*.nupkg)" >> $GITHUB_ENV
 
     - name: Publish
       run: |
-        dotnet nuget push "/home/runner/work/MihomoSharp/MihomoSharp/bin/Release/MihomoSharp.${{ env.VERSION }}.nupkg" -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
+        dotnet nuget push ${{ env.PACKAGE_PATH }} -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
       env:
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}

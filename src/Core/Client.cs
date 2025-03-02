@@ -38,24 +38,37 @@ public class MihomoClient
         }
     }
 
-    public void FetchIcon(object Model)
+    public async Task FetchIconAsync(object Model, bool executeImmediately = false)
     {
+        Task task = null;
+
         switch (Model)
         {
             case CharacterModel character:
                 var icon = GetIconUrl(character.Icon);
-                string Name = character.Name;
-                string AllName = $"{Name}.{icon.FileType}";
-                _tasks.Add(FetchAsync(AllName, icon.iconUrl, "icons/characters"));
+                string characterName = character.Name;
+                string characterFileName = $"{characterName}.{icon.FileType}";
+                task = FetchAsync(characterFileName, icon.iconUrl, "icons/characters");
                 break;
+
             case PlayerModel player:
                 var avatar = GetIconUrl(player.Avatar.Icon);
                 string uid = player.Uid;
-                string name = $"{uid}_avatar.{avatar.FileType}";
-                _tasks.Add(FetchAsync(name, avatar.iconUrl, "icons/player"));
+                string playerFileName = $"{uid}_avatar.{avatar.FileType}";
+                task = FetchAsync(playerFileName, avatar.iconUrl, "icons/player");
                 break;
+
             default:
-                throw new ArgumentException($"Invalid model type. {nameof(Model)}");
+                throw new ArgumentException($"Invalid model type: {Model.GetType().Name}");
+        }
+
+        if (executeImmediately)
+        {
+            await task;  // 异步等待任务完成
+        }
+        else
+        {
+            _tasks.Add(task);
         }
     }
 

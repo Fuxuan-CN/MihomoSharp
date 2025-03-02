@@ -105,6 +105,14 @@ await client.FetchCharacterIconAsync(character);
 await client.FetchIconCommitAsync();
 ```
 
+### dont want to invoke commit fetch player method?
+
+- dont worry, here is the code to fetch player avatar without invoking commit fetch player method.
+
+```csharp
+await client.FetchIconAsync(executeImmediately: true);
+```
+
 ### Project Progress
 
 - [x] Reimplementation of the original mihomo V2 version.

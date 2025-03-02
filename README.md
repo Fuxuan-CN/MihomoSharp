@@ -86,14 +86,14 @@ namespace MihomoSharp
 
 ```csharp
 // 确保playerData是PlayerData类型，不然会抛出ArgumentException
-client.FetchIcon(playerData.Player);
+await client.FetchIconAsync(playerData.Player);
 ```
 
 ### 获取角色头像
 
 ```csharp
 // 确保character是CharacterModel类型，不然会抛出ArgumentException
-client.FetchIcon(character);
+await client.FetchIconAsync(character);
 ```
 
 ### 下载头像任务提交
@@ -101,6 +101,14 @@ client.FetchIcon(character);
 ```csharp
 // 最后，不要忘了提交头像下载任务噢!
 await client.FetchIconCommitAsync(); // 提交所有头像下载任务
+```
+
+### 不想显示提交，希望立即执行咋办？
+
+- 没事，我提供了一个选项，可以不显示提交，立即执行头像下载任务。
+
+```csharp
+await client.FetchIconAsync(executeImmediately: true); // 不显示提交，立即执行
 ```
 
 ### 项目进度

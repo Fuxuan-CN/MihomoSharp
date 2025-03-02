@@ -36,56 +36,56 @@ using System;
 using System.Threading.Tasks;
 using MihomoSharp.Core.Client;
 using MihomoSharp.Models.StarRailInfo;
-using MihomoSharp.Models.LanguageSwich;
+using MihomoSharp.Models.LanguageSwitch;
 using MihomoSharp.Exceptions.UserNotFound;
 
-namespace MihomoSharp
+namespace YourNamespace;
+
+class Program
 {
-    class Program
+    static async Task Main(string[] args)
     {
-        static async Task Main(string[] args)
+        // Initialize the client
+        var client = new MihomoClient();
+
+        try
         {
-            // Initialize the client
-            var client = new MihomoClient();
+            // Fetch player data
+            var uid = "110554887"; // Example UID
+            var language = Languages.CHS; // Select language
+            var playerData = await client.FetchUserAsync(uid, language);
+            
+            // Print player information
+            Console.WriteLine($"Player Name: {playerData.Player.Name}");
+            Console.WriteLine($"Level: {playerData.Player.Level}");
+            Console.WriteLine($"Player Signature: {playerData.Player.Signature}");
 
-            try
+            // Print character information
+            Console.WriteLine("\nCharacters:");
+            foreach (var character in playerData.Characters)
             {
-                // Fetch player data
-                var uid = "110554887"; // Example UID
-                var language = Languages.CHS; // Select language
-                var playerData = await client.FetchUserAsync(uid, language);
-                
-                // Print player information
-                Console.WriteLine($"Player Name: {playerData.Player.Name}");
-                Console.WriteLine($"Level: {playerData.Player.Level}");
-                Console.WriteLine($"Player Signature: {playerData.Player.Signature}");
-
-                // Print character information
-                Console.WriteLine("\nCharacters:");
-                foreach (var character in playerData.Characters)
-                {
-                    Console.WriteLine($"  - Name: {character.Name}, Level: {character.Level}, Rarity: {character.Rarity}");
-                }
+                Console.WriteLine($"  - Name: {character.Name}, Level: {character.Level}, Rarity: {character.Rarity}");
             }
-            catch (UserNotFound ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-            }
-            catch (ArgumentException ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-            }
-            catch (HttpRequestException ex)
-            {
-                Console.WriteLine($"HTTP Error: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Unexpected Error: {ex.Message}");
-            }
+        }
+        catch (UserNotFound ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"HTTP Error: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected Error: {ex.Message}");
         }
     }
 }
+
 ```
 
 ### Fetch Player Avatar
@@ -106,13 +106,13 @@ await client.FetchCharacterIconAsync(character);
 
 ```csharp
 // please make sure to invoke this method to execute your fetch tasks
-// or you will get notting.
+// or you will get noting.
 await client.FetchIconCommitAsync();
 ```
 
-### dont want to invoke commit fetch icon method?
+### don't want to invoke commit fetch icon method?
 
-- dont worry, here is the code to fetch player avatar without invoking commit fetch player method.
+- don't worry, here is the code to fetch player avatar without invoking commit fetch player method.
 
 ```csharp
 // ensure the obj is a PlayerModel or CharacterModel.
@@ -121,7 +121,7 @@ await client.FetchIconAsync(obj, executeImmediately: true);
 
 ### Project Progress
 
-- [x] Reimplementation of the original mihomo V2 version.
+- [x] Re implementation of the original mihomo V2 version.
 - [ ] Implementation of mihomo V1 API.
 - [x] Provided examples showing how to use C# `System.Linq` for data filtering.
 

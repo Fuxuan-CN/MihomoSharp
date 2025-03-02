@@ -38,50 +38,49 @@ using MihomoSharp.Models.StarRailInfo;
 using MihomoSharp.Models.LanguageSwich;
 using MihomoSharp.Exceptions.UserNotFound;
 
-namespace MihomoSharp
+namespace YourNamespace;
+
+class Program
 {
-    class Program
+    static async Task Main(string[] args)
     {
-        static async Task Main(string[] args)
+        // 初始化客户端
+        var client = new MihomoClient();
+
+        try
         {
-            // 初始化客户端
-            var client = new MihomoClient();
+            // 获取玩家数据
+            var uid = "110554887"; // 示例 UID
+            var language = Languages.CHS; // 选择语言
+            var playerData = await client.FetchUserAsync(uid, language);
+            
+            // 打印玩家信息
+            Console.WriteLine($"玩家名: {playerData.Player.Name}");
+            Console.WriteLine($"等级: {playerData.Player.Level}");
+            Console.WriteLine($"玩家签名: {playerData.Player.Signature}");
 
-            try
+            // 打印角色信息
+            Console.WriteLine("\n展示的角色:");
+            foreach (var character in playerData.Characters)
             {
-                // 获取玩家数据
-                var uid = "110554887"; // 示例 UID
-                var language = Languages.CHS; // 选择语言
-                var playerData = await client.FetchUserAsync(uid, language);
-                
-                // 打印玩家信息
-                Console.WriteLine($"玩家名: {playerData.Player.Name}");
-                Console.WriteLine($"等级: {playerData.Player.Level}");
-                Console.WriteLine($"玩家签名: {playerData.Player.Signature}");
-
-                // 打印角色信息
-                Console.WriteLine("\n展示的角色:");
-                foreach (var character in playerData.Characters)
-                {
-                    Console.WriteLine($"  - 名字: {character.Name}, 等级: {character.Level}, 角色星级: {character.Rarity}");
-                }
+                Console.WriteLine($"  - 名字: {character.Name}, 等级: {character.Level}, 角色星级: {character.Rarity}");
             }
-            catch (UserNotFound ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-            }
-            catch (ArgumentException ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-            }
-            catch (HttpRequestException ex)
-            {
-                Console.WriteLine($"HTTP Error: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Unexpected Error: {ex.Message}");
-            }
+        }
+        catch (UserNotFound ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"HTTP Error: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected Error: {ex.Message}");
         }
     }
 }

@@ -1,6 +1,11 @@
 
 # MihomoSharp
 
+## Languages
+
+- [Chinese Documentation](README.md)
+- [English Documentation](README.EN.md)
+
 ## Description
 
 MihomoSharp is a C# library for fetching and parsing player data from [Mihomo API](https://api.mihomo.me) for the game Honkai: Star Rail. It is a rewrite of the original Python version `mihomo`, which can be found at [Mihomo](https://github.com/KT-Yeh/mihomo).

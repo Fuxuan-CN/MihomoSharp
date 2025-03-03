@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Net.Http;
-using System.Text.Jso;
+using System.Text.Json;
 using System.Threading.Tasks;
 using MihomoSharp.Models.StarRailInfo;
 using MihomoSharp.Models.Player;

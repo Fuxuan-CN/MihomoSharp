@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Net.Http;
-using System.Text.Json;
+using System.Text.Jso;
 using System.Threading.Tasks;
 using MihomoSharp.Models.StarRailInfo;
 using MihomoSharp.Models.Player;
@@ -19,9 +19,9 @@ public sealed class MihomoClient : IDisposable, IAsyncDisposable
     private List<Task> _tasks = new List<Task>();
     private bool _disposed;
 
-    public MihomoClient()
+    public MihomoClient(HttpClient? httpClient = null)
     {
-        _httpClient = new HttpClient();
+        _httpClient = httpClient ?? new HttpClient();
     }
 
     private (string iconUrl, string FileType) GetIconUrl(string Icon)
@@ -36,6 +36,10 @@ public sealed class MihomoClient : IDisposable, IAsyncDisposable
         {
             byte[] data = await response.Content.ReadAsByteArrayAsync();
             await WriteIconBytesToFileAsync(data, FileName, basePath);
+        }
+        else
+        {
+            throw new HttpRequestException("Failed to fetch icon data.");
         }
     }
 

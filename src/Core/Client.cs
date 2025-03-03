@@ -19,10 +19,12 @@ public sealed class MihomoClient : IDisposable, IAsyncDisposable
     private List<Task> _tasks = new List<Task>();
     private bool _disposed;
 
+    #nullable enable
     public MihomoClient(HttpClient? httpClient = null)
     {
         _httpClient = httpClient ?? new HttpClient();
     }
+    #nullable disable
 
     private (string iconUrl, string FileType) GetIconUrl(string Icon)
     {

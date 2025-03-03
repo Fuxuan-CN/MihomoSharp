@@ -11,12 +11,13 @@ using MihomoSharp.Exceptions.UserNotFound;
 
 namespace MihomoSharp.Core.Client;
 
-public sealed class MihomoClient : IDisposable
+public sealed class MihomoClient : IDisposable, IAsyncDisposable
 {
     private readonly HttpClient _httpClient;
     private readonly string _baseUrl = "https://api.mihomo.me/sr_info_parsed";
     private readonly string _assertUrl = "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master";
     private List<Task> _tasks = new List<Task>();
+    private bool _disposed;
 
     public MihomoClient()
     {
@@ -117,7 +118,22 @@ public sealed class MihomoClient : IDisposable
 
     public void Dispose()
     {
-        _httpClient.Dispose();
-        _tasks.Clear();
+        if (!_disposed)
+        {
+            _httpClient?.Dispose();
+            if (_tasks.Count > 0)
+            {
+                _tasks.Clear(); // 清空任务列表
+            }
+            _disposed = true;
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (!_disposed)
+        {
+            await Task.Run(() => Dispose());
+        }
     }
 }

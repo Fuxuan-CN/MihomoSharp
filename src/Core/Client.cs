@@ -99,8 +99,6 @@ public sealed class MihomoClient : IDisposable, IAsyncDisposable
         }
     }
 
-    
-
     public async Task<StarrailInfoParsed> FetchUserAsync(string uid, Languages language = Languages.CHS)
     {
         var url = $"{_baseUrl}/{uid}?lang={language.ToString().ToLower()}";

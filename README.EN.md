@@ -33,39 +33,44 @@ dotnet restore
 
 ```csharp
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
-using MihomoSharp.Core.Client;
-using MihomoSharp.Models.StarRailInfo;
+using MihomoSharp.ApiEndpoints;
+using MihomoSharp.DataFetcher.Mihomo;
 using MihomoSharp.Models.LanguageSwitch;
 using MihomoSharp.Exceptions.UserNotFound;
 
-namespace YourNamespace;
+namespace MihomoSharpTest;
 
 class Program
 {
     static async Task Main(string[] args)
     {
-        // Initialize the client
-        var client = new MihomoClient();
+        // 初始化客户端
+        var dataFetcher = new MihomoDataFetcher();
 
         try
         {
-            // Fetch player data
-            var uid = "110554887"; // Example UID
-            var language = Languages.CHS; // Select language
-            var playerData = await client.FetchUserAsync(uid, language);
+            // 获取玩家数据
+            var uid = "110554887"; // 示例 UID
+            var language = Languages.CHS; // 选择语言
+            var playerData = await dataFetcher.FetchUserAsync(uid, language);
+            await dataFetcher.FetchIconAsync(playerData.Player);
             
-            // Print player information
-            Console.WriteLine($"Player Name: {playerData.Player.Name}");
-            Console.WriteLine($"Level: {playerData.Player.Level}");
-            Console.WriteLine($"Player Signature: {playerData.Player.Signature}");
+            // 打印玩家信息
+            Console.WriteLine($"玩家名: {playerData.Player.Name}");
+            Console.WriteLine($"等级: {playerData.Player.Level}");
+            Console.WriteLine($"玩家签名: {playerData.Player.Signature}");
 
-            // Print character information
-            Console.WriteLine("\nCharacters:");
+            // 打印角色信息
+            Console.WriteLine("\n展示的角色:");
             foreach (var character in playerData.Characters)
             {
-                Console.WriteLine($"  - Name: {character.Name}, Level: {character.Level}, Rarity: {character.Rarity}");
+                Console.WriteLine($"  - 名字: {character.Name}, 等级: {character.Level}, 角色星级: {character.Rarity}");
+                await dataFetcher.FetchIconAsync(character);
             }
+
+            await dataFetcher.FetchIconCommitAsync(); // 等待所有异步任务完成
         }
         catch (UserNotFound ex)
         {

@@ -32,27 +32,29 @@ dotnet restore
 
 ```csharp
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
-using MihomoSharp.Core.Client;
-using MihomoSharp.Models.StarRailInfo;
+using MihomoSharp.ApiEndpoints;
+using MihomoSharp.DataFetcher.Mihomo;
 using MihomoSharp.Models.LanguageSwitch;
 using MihomoSharp.Exceptions.UserNotFound;
 
-namespace YourNamespace;
+namespace MihomoSharpTest;
 
 class Program
 {
     static async Task Main(string[] args)
     {
         // 初始化客户端
-        var client = new MihomoClient();
+        var dataFetcher = new MihomoDataFetcher();
 
         try
         {
             // 获取玩家数据
             var uid = "110554887"; // 示例 UID
             var language = Languages.CHS; // 选择语言
-            var playerData = await client.FetchUserAsync(uid, language);
+            var playerData = await dataFetcher.FetchUserAsync(uid, language);
+            await dataFetcher.FetchIconAsync(playerData.Player);
             
             // 打印玩家信息
             Console.WriteLine($"玩家名: {playerData.Player.Name}");
@@ -64,7 +66,10 @@ class Program
             foreach (var character in playerData.Characters)
             {
                 Console.WriteLine($"  - 名字: {character.Name}, 等级: {character.Level}, 角色星级: {character.Rarity}");
+                await dataFetcher.FetchIconAsync(character);
             }
+
+            await dataFetcher.FetchIconCommitAsync(); // 等待所有异步任务完成
         }
         catch (UserNotFound ex)
         {
@@ -84,6 +89,7 @@ class Program
         }
     }
 }
+
 ```
 
 ### 获取玩家头像

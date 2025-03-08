@@ -1,7 +1,7 @@
 
 namespace MihomoSharp.ApiEndpoints;
 
-public class MihomoApiEndpoint
+public readonly struct MihomoApiEndpoint
 {
     public string BaseUrl { get; } = "https://api.mihomo.me";
     public string PlayerInfoEndpoint { get; } = "/sr_info_parsed";

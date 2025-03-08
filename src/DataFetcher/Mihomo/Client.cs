@@ -35,8 +35,7 @@ public sealed class MihomoDataFetcher : IStarRailDataFetcher<MihomoApiEndpoint, 
         return ($"{_apiEndpoint.IconEndpoint}/{Icon}", Path.GetExtension(Icon));
     }
 
-    private async Task<TRespData> _FetchDataAsync<TRespData>(string url)
-        where TRespData : class
+    private async Task<TRespData> _FetchDataAsync<TRespData>(string url) where TRespData : class
     {
         var response = await _httpClient.GetAsync(url);
         switch (response.StatusCode)

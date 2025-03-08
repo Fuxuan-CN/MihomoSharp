@@ -1,4 +1,3 @@
-
 using System.Threading.Tasks;
 using MihomoSharp.Models.StarRailInfo;
 using MihomoSharp.Models.LanguageSwitch;

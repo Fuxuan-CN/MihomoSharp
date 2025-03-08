@@ -54,12 +54,20 @@ class Program
             var uid = "110554887"; // 示例 UID
             var language = Languages.CHS; // 选择语言
             var playerData = await dataFetcher.FetchUserAsync(uid, language);
+            var actData = await dataFetcher.FetchUserActivityAsync(uid, language); // 获取玩家活动信息
             await dataFetcher.FetchIconAsync(playerData.Player);
+
+            Console.WriteLine($"玩家 UID: {actData.Uid}");
+            foreach (var info in actData.Infos)
+            {
+                Console.WriteLine($"玩家活动: {info.Text}\n");
+            }
             
             // 打印玩家信息
             Console.WriteLine($"玩家名: {playerData.Player.Name}");
             Console.WriteLine($"等级: {playerData.Player.Level}");
             Console.WriteLine($"玩家签名: {playerData.Player.Signature}");
+            
 
             // 打印角色信息
             Console.WriteLine("\n展示的角色:");
@@ -89,7 +97,6 @@ class Program
         }
     }
 }
-
 ```
 
 ### 获取玩家头像

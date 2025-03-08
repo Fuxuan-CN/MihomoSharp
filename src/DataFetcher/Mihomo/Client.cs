@@ -1,11 +1,13 @@
 using System;
 using System.IO;
+using System.Text;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using MihomoSharp.ApiEndpoints;
 using MihomoSharp.Interface;
 using MihomoSharp.Models.StarRailInfo;
+using MihomoSharp.Models.ActivityInfo;
 using MihomoSharp.Models.Player;
 using MihomoSharp.Models.Character;
 using MihomoSharp.Models.LanguageSwitch;
@@ -13,11 +15,12 @@ using MihomoSharp.Exceptions.UserNotFound;
 
 namespace MihomoSharp.DataFetcher.Mihomo;
 
-public sealed class MihomoDataFetcher : IStarRailDataFetcher<MihomoApiEndpoint, MihomoStarrailInfoParsed>, IDisposable, IAsyncDisposable
+public sealed class MihomoDataFetcher : IStarRailDataFetcher<MihomoApiEndpoint, MihomoStarrailInfoParsed, MihomoActivityInfo>, IDisposable, IAsyncDisposable
 {
     private readonly HttpClient _httpClient;
     private readonly MihomoApiEndpoint _apiEndpoint = new MihomoApiEndpoint();
     private List<Task> _tasks = new List<Task>();
+    private StringBuilder _needFetchUrl = new StringBuilder();
     private bool _disposed;
 
     #nullable enable
@@ -32,7 +35,27 @@ public sealed class MihomoDataFetcher : IStarRailDataFetcher<MihomoApiEndpoint, 
         return ($"{_apiEndpoint.IconEndpoint}/{Icon}", Path.GetExtension(Icon));
     }
 
-    private async Task FetchAsync(string FileName, string Url, string basePath = "icons")
+    private async Task<TRespData> _FetchDataAsync<TRespData>(string url)
+        where TRespData : class
+    {
+        var response = await _httpClient.GetAsync(url);
+        switch (response.StatusCode)
+        {
+            case System.Net.HttpStatusCode.OK:
+                var content = await response.Content.ReadAsStringAsync();
+                var dat = JsonSerializer.Deserialize<TRespData>(content);
+                return dat;
+            case System.Net.HttpStatusCode.NotFound:
+                throw new UserNotFound("User not found.");
+            case System.Net.HttpStatusCode.BadRequest:
+                var ErrorMessage = JsonSerializer.Deserialize<Dictionary<string, string>>(await response.Content.ReadAsStringAsync())["detail"];
+                throw new ArgumentException($"Invalid parameters, reason: {ErrorMessage}.");
+            default:
+                throw new HttpRequestException("Failed to fetch user data.");
+        }
+    }
+
+    private async Task _FetchIconAsync(string FileName, string Url, string basePath = "icons")
     {
         var response = await _httpClient.GetAsync(Url);
         if (response.IsSuccessStatusCode)
@@ -56,14 +79,14 @@ public sealed class MihomoDataFetcher : IStarRailDataFetcher<MihomoApiEndpoint, 
                 var icon = GetIconUrl(character.Icon);
                 string characterName = character.Name;
                 string characterFileName = $"{characterName}.{icon.FileType}";
-                task = FetchAsync(characterFileName, icon.iconUrl, "icons/characters");
+                task = _FetchIconAsync(characterFileName, icon.iconUrl, "icons/characters");
                 break;
 
             case PlayerModel player:
                 var avatar = GetIconUrl(player.Avatar.Icon);
                 string uid = player.Uid;
                 string playerFileName = $"{uid}_avatar.{avatar.FileType}";
-                task = FetchAsync(playerFileName, avatar.iconUrl, "icons/player");
+                task = _FetchIconAsync(playerFileName, avatar.iconUrl, "icons/player");
                 break;
 
             default:
@@ -101,25 +124,35 @@ public sealed class MihomoDataFetcher : IStarRailDataFetcher<MihomoApiEndpoint, 
         }
     }
 
-    public async Task<MihomoStarrailInfoParsed> FetchUserAsync(string uid, Languages language = Languages.CHS)
+    public async Task<MihomoActivityInfo> FetchUserActivityAsync(string uid, Languages language = Languages.CHS, bool IsForceUpdate = false)
     {
-        var url = $"{_apiEndpoint.BaseUrl}{_apiEndpoint.PlayerInfoEndpoint}/{uid}?lang={language.ToString().ToLower()}";
-        var response = await _httpClient.GetAsync(url);
+        _needFetchUrl.Clear();
+        _needFetchUrl.Append(_apiEndpoint.BaseUrl);
+        _needFetchUrl.Append(_apiEndpoint.ActivityInfoEndpoint);
+        _needFetchUrl.Append("/");
+        _needFetchUrl.Append(uid);
+        _needFetchUrl.Append("?lang=");
+        _needFetchUrl.Append(language.ToString().ToLower());
+        _needFetchUrl.Append(IsForceUpdate ? "&is_force_update=true" : "");
+        var url = _needFetchUrl.ToString();
+        var response = await _FetchDataAsync<MihomoActivityInfo>(url);
+        return response;
+    }
 
-        switch (response.StatusCode)
-        {
-            case System.Net.HttpStatusCode.OK:
-                var content = await response.Content.ReadAsStringAsync();
-                var dat = JsonSerializer.Deserialize<MihomoStarrailInfoParsed>(content);
-                return dat;
-            case System.Net.HttpStatusCode.NotFound:
-                throw new UserNotFound("User not found.");
-            case System.Net.HttpStatusCode.BadRequest:
-                var ErrorMessage = JsonSerializer.Deserialize<Dictionary<string, string>>(await response.Content.ReadAsStringAsync())["detail"];
-                throw new ArgumentException($"Invalid parameters, reason: {ErrorMessage}.");
-            default:
-                throw new HttpRequestException("Failed to fetch user data.");
-        }
+
+    public async Task<MihomoStarrailInfoParsed> FetchUserAsync(string uid, Languages language = Languages.CHS, bool IsForceUpdate = false)
+    {
+        _needFetchUrl.Clear();
+        _needFetchUrl.Append(_apiEndpoint.BaseUrl);
+        _needFetchUrl.Append(_apiEndpoint.PlayerInfoEndpoint);
+        _needFetchUrl.Append("/");
+        _needFetchUrl.Append(uid);
+        _needFetchUrl.Append("?lang=");
+        _needFetchUrl.Append(language.ToString().ToLower());
+        _needFetchUrl.Append(IsForceUpdate ? "&is_force_update=true" : "");
+        var url = _needFetchUrl.ToString();
+        var response = await _FetchDataAsync<MihomoStarrailInfoParsed>(url);
+        return response;
     }
 
     public void Dispose()

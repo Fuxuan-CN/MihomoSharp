@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Text;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -20,7 +19,6 @@ public sealed class MihomoDataFetcher : IStarRailDataFetcher<MihomoApiEndpoint, 
     private readonly HttpClient _httpClient;
     private readonly MihomoApiEndpoint _apiEndpoint = new MihomoApiEndpoint();
     private List<Task> _tasks = new List<Task>();
-    private StringBuilder _needFetchUrl = new StringBuilder();
     private bool _disposed;
 
     #nullable enable
@@ -123,17 +121,14 @@ public sealed class MihomoDataFetcher : IStarRailDataFetcher<MihomoApiEndpoint, 
         }
     }
 
+    private string BuildApiUrl(string endpoint, string uid, Languages language, bool isForceUpdate)
+    {
+        return $"{_apiEndpoint.BaseUrl}{endpoint}/{uid}?lang={language.ToString().ToLower()}{(isForceUpdate ? "&is_force_update=true" : "")}";
+    }
+
     public async Task<MihomoActivityInfo> FetchUserActivityAsync(string uid, Languages language = Languages.CHS, bool IsForceUpdate = false)
     {
-        _needFetchUrl.Clear();
-        _needFetchUrl.Append(_apiEndpoint.BaseUrl);
-        _needFetchUrl.Append(_apiEndpoint.ActivityInfoEndpoint);
-        _needFetchUrl.Append("/");
-        _needFetchUrl.Append(uid);
-        _needFetchUrl.Append("?lang=");
-        _needFetchUrl.Append(language.ToString().ToLower());
-        _needFetchUrl.Append(IsForceUpdate ? "&is_force_update=true" : "");
-        var url = _needFetchUrl.ToString();
+        var url = BuildApiUrl(_apiEndpoint.ActivityInfoEndpoint, uid, language, IsForceUpdate);
         var response = await _FetchDataAsync<MihomoActivityInfo>(url);
         return response;
     }
@@ -141,15 +136,7 @@ public sealed class MihomoDataFetcher : IStarRailDataFetcher<MihomoApiEndpoint, 
 
     public async Task<MihomoStarrailInfoParsed> FetchUserAsync(string uid, Languages language = Languages.CHS, bool IsForceUpdate = false)
     {
-        _needFetchUrl.Clear();
-        _needFetchUrl.Append(_apiEndpoint.BaseUrl);
-        _needFetchUrl.Append(_apiEndpoint.PlayerInfoEndpoint);
-        _needFetchUrl.Append("/");
-        _needFetchUrl.Append(uid);
-        _needFetchUrl.Append("?lang=");
-        _needFetchUrl.Append(language.ToString().ToLower());
-        _needFetchUrl.Append(IsForceUpdate ? "&is_force_update=true" : "");
-        var url = _needFetchUrl.ToString();
+        var url = BuildApiUrl(_apiEndpoint.PlayerInfoEndpoint, uid, language, IsForceUpdate);
         var response = await _FetchDataAsync<MihomoStarrailInfoParsed>(url);
         return response;
     }

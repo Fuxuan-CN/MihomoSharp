@@ -6,11 +6,19 @@ using MihomoSharp.Models.BaseActivity;
 
 namespace MihomoSharp.Interface;
 
+public interface IIconGetable
+{
+    string GetIconName();
+    string GetIconPlace();
+    string GetIconFileStorePath();
+}
+
 // 定义接口，获取《崩坏星穹铁道》的规范
 public interface IStarRailDataFetcher<TApiEndpoint, TUserData, TUserActivity> where TUserData : BaseStarRailInfoData where TUserActivity : BaseActivityInfo
 {
     Task<TUserData> FetchUserAsync(string uid, Languages language = Languages.CHS, bool IsForceUpdate = false);
     Task<TUserActivity> FetchUserActivityAsync(string uid, Languages language = Languages.CHS, bool IsForceUpdate = false);
-    Task FetchIconAsync(object model, bool executeImmediately = false);
+    Task FetchIconAsync(IIconGetable model, bool executeImmediately = false);
     Task FetchIconCommitAsync();
 }
+

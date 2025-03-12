@@ -3,10 +3,11 @@ using System.Text.Json.Serialization;
 using MihomoSharp.Models.Combat;
 using MihomoSharp.Models.Equipment;
 using MihomoSharp.Models.Stat;
+using MihomoSharp.Interface;
 
 namespace MihomoSharp.Models.Character;
 
-public sealed class CharacterModel
+public sealed class CharacterModel : IIconGetable
 {
     [JsonPropertyName("id")]
     public string Id { get; set; }
@@ -69,4 +70,10 @@ public sealed class CharacterModel
     public List<Property> Properties { get; set; }
 
     public int MaxLevel => 20 + 10 * Ascension;
+
+    public string GetIconName() => Name;
+
+    public string GetIconPlace() => Icon;
+
+    public string GetIconFileStorePath() => "icons/characters";
 }

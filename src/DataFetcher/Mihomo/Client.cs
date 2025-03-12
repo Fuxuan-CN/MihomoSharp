@@ -66,29 +66,15 @@ public sealed class MihomoDataFetcher : IStarRailDataFetcher<MihomoApiEndpoint, 
         }
     }
 
-    public async Task FetchIconAsync(object Model, bool executeImmediately = false)
+    public async Task FetchIconAsync(IIconGetable Model, bool executeImmediately = false)
     {
         Task task = null;
 
-        switch (Model)
-        {
-            case CharacterModel character:
-                var icon = GetIconUrl(character.Icon);
-                string characterName = character.Name;
-                string characterFileName = $"{characterName}.{icon.FileType}";
-                task = _FetchIconAsync(characterFileName, icon.iconUrl, "icons/characters");
-                break;
-
-            case PlayerModel player:
-                var avatar = GetIconUrl(player.Avatar.Icon);
-                string uid = player.Uid;
-                string playerFileName = $"{uid}_avatar.{avatar.FileType}";
-                task = _FetchIconAsync(playerFileName, avatar.iconUrl, "icons/player");
-                break;
-
-            default:
-                throw new ArgumentException($"Invalid model type: {Model.GetType().Name}");
-        }
+        var IconPlace = Model.GetIconPlace();
+        var IconStorePath = Model.GetIconFileStorePath();
+        var Icon = GetIconUrl(IconPlace);
+        var IconFileName = $"{Model.GetIconName()}.{Icon.FileType}";
+        task = _FetchIconAsync(IconFileName, Icon.iconUrl, IconStorePath);
 
         if (executeImmediately)
         {

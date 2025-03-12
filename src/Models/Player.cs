@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using MihomoSharp.Models.Avatar;
+using MihomoSharp.Interface;
 
 namespace MihomoSharp.Models.Player;
 
@@ -15,7 +16,7 @@ public class ForgottenHall
     public int MemoryOfChaos { get; set; }
 }
 
-public class PlayerModel
+public class PlayerModel : IIconGetable
 {
     [JsonPropertyName("uid")]
     public string Uid { get; set; }
@@ -55,4 +56,10 @@ public class PlayerModel
 
     [JsonPropertyName("achievement_count")]
     public int Achievements { get; set; }
+
+    public string GetIconName() => Uid;
+
+    public string GetIconPlace() => Avatar.Icon;
+
+    public string GetIconFileStorePath() => "icons/player";
 }

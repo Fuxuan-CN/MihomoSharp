@@ -102,14 +102,14 @@ class Program
 ### 获取玩家头像
 
 ```csharp
-// 确保playerData是PlayerData类型，不然会抛出ArgumentException
+// 确保模型是继承的IIconGetable接口，不然会抛出ArgumentException
 await client.FetchIconAsync(playerData.Player);
 ```
 
 ### 获取角色头像
 
 ```csharp
-// 确保character是CharacterModel类型，不然会抛出ArgumentException
+// 确保模型是继承的IIconGetable接口，不然会抛出ArgumentException
 await client.FetchIconAsync(character);
 ```
 

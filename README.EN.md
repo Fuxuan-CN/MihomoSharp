@@ -103,14 +103,14 @@ class Program
 ### Fetch Player Avatar
 
 ```csharp
-// please make sure the player type is PlayerModel, or you will get a ArgumentException
+// make sure the value object has implemented the IIconGetable interface.
 await client.FetchPlayerIconAsync(playerData.Player);
 ```
 
 ### Fetch Character Avatar
 
 ```csharp
-// please make sure the character type is CharacterModel, or you will get a ArgumentException
+// make sure the value object has implemented the IIconGetable interface.
 await client.FetchCharacterIconAsync(character);
 ```
 
